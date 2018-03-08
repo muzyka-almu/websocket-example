@@ -22,6 +22,8 @@ public class WebsocketController {
         return new Greeting("Hello, " + message.getValue() + "!");
     }
 
+    // https://docs.spring.io/spring-framework/docs/4.1.0.RC1/spring-framework-reference/html/websocket.html#websocket-stomp-user-destination
+
     @MessageMapping("/monologue")
     @SendToUser("/queue/individual/message")
     // That will got just message sender
