@@ -1,7 +1,10 @@
 var stompClient = null;
+var sendToLink = "";
 
 function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
+    $("#connectNotification").prop("disabled", connected);
+    $("#connectMonologue").prop("disabled", connected);
+    $("#connectDialog").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
     if (connected) {
         $("#conversation").show();
@@ -12,13 +15,28 @@ function setConnected(connected) {
     $("#greetings").html("");
 }
 
-function connect() {
+function connectNotification() {
+    sendToLink = "/app/notification";
+    connect("/topic/greetings")
+}
+
+function connectMonologue() {
+    sendToLink = "/app/monologue";
+    connect("/user/queue/individual/message");
+}
+
+function connectDialog() {
+    sendToLink = "/app/dialog";
+    connect("/user/"+$("#connectAs").val()+"/personal");
+}
+
+function connect(subscribeLink) {
     var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
+        stompClient.subscribe(subscribeLink, function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
         });
     });
@@ -33,7 +51,7 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'value': $("#name").val()}));
+    stompClient.send(sendToLink, {}, JSON.stringify({'value': $("#name").val()}));
 }
 
 function showGreeting(message) {
@@ -41,7 +59,9 @@ function showGreeting(message) {
 }
 
 $(function () {
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $( "#connectNotification" ).click(connectNotification);
+    $( "#connectMonologue" ).click(connectMonologue);
+    $( "#connectDialog" ).click(connectDialog);
+    $( "#disconnect" ).click(disconnect);
+    $( "#send" ).click(sendName);
 });

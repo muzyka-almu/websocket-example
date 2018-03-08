@@ -12,15 +12,18 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="connect">WebSocket connection:</label>
-                <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                <label>WebSocket connection:</label>
+                <button id="connectNotification" class="btn btn-default" type="submit">Connect notification</button>
+                <button id="connectMonologue" class="btn btn-default" type="submit">Connect monologue</button>
+                <input type="text" id="connectAs" class="form-control" placeholder="Connect as...">
+                <button id="connectDialog" class="btn btn-default" type="submit">Connect dialog</button>
                 <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
                 </button>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="name">What is your name?</label>
+                <label for="name">What is name?</label>
                 <input type="text" id="name" class="form-control" placeholder="Your name here...">
             </div>
             <button id="send" class="btn btn-default" type="submit">Send</button>
